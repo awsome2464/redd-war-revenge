@@ -1,0 +1,415 @@
+﻿#######################
+## REDD War: Revenge ##
+#######################
+
+define a = Character("Amy", image="amy", what_prefix='"', what_suffix='"')
+define j = Character("John", image="john", what_prefix='"', what_suffix='"')
+define l = Character("Leslie", image="leslie", what_prefix='"', what_suffix='"')
+define m = Character("Majiku", image="majiku", color="#d00000", what_prefix='"', what_suffix='"')
+
+image amy = Placeholder("girl")
+image john = Placeholder("boy")
+image leslie = Placeholder("girl")
+image majiku = Placeholder("boy")
+
+image bg fade = "#000000"
+image bg news = "#000fff"
+image bg livingroom = "#5f5f5f"
+
+define audio.three_sixty_five_days_intro = "<to 4.822 loop 0>audio/three_sixty_five_days.ogg"
+define audio.three_sixty_five_days_main = "<from 4.822>audio/three_sixty_five_days.ogg"
+
+transform middle:
+    xalign 0.5 yalign 0.5
+transform two1:
+    xalign 0.25 yalign 0.5
+transform two2:
+    xalign 0.75 yalign 0.5
+
+transform introzoom:
+    zoom 0.75
+    linear 8.0 zoom 1.1
+transform presents:
+    xalign 0.5 yalign 0.75
+    alpha 0.0
+    pause 4.5
+    linear 1.0 alpha 1.0
+transform revenge:
+    xalign 0.5 yalign 0.5
+    xzoom 2.0 yzoom 1.5
+
+style countdown:
+    color "#b00000"
+    font "fonts/EHSMB.TTF"
+    size 150
+    outlines [(absolute(5), "#000000", absolute(0), absolute(0))]
+style countdown2:
+    color "#b00000"
+    font "fonts/EHSMB.TTF"
+    size 50
+style countdown3:
+    color "#b00000"
+    font "fonts/EHSMB.TTF"
+    size 35
+style revenge:
+    color "#820000"
+    font "fonts/BadSuabiaSwing-Regular.otf"
+    size 200
+
+screen countdownclock():
+    vbox:
+        xalign 0.5 yalign 0.5
+        text "[hoursleft2]:[minutesleft2]:[secondsleft2]" style "countdown" xalign 0.5
+        hbox:
+            xalign 0.5
+            spacing 140
+            text "HOURS" style "countdown3"
+            text "MINUTES" style "countdown3"
+            text "SECONDS" style "countdown3"
+        null height 50
+        text "until the REDD War [startorend]" style "countdown2" xalign 0.5
+
+screen intro:
+    if goodtales:
+        text "PRESENTS" style "countdown2" at presents xalign 0.5
+    if revenge_reveal:
+        text "REVENGE" style "revenge" at revenge xalign 0.5
+    hbox at introzoom:
+        xalign 0.5 yalign 0.5
+        text intro_1 style "countdown" xalign 0.5 
+        text intro_2 style "countdown" xalign 0.5 
+        text intro_3 style "countdown" xalign 0.5
+        text intro_4 style "countdown" xalign 0.5
+        text intro_5 style "countdown" xalign 0.5
+        text intro_6 style "countdown" xalign 0.5
+        text intro_7 style "countdown" xalign 0.5
+        text intro_8 style "countdown" xalign 0.5
+        if goodtales:
+            text intro_9 style "countdown" xalign 0.5
+            text intro_10 style "countdown" xalign 0.5
+
+screen countdowntest():
+    vbox:
+        xalign 0.0 yalign 0.0
+        text "[hoursleft1] [minutesleft1] [secondsleft1]"
+        text "[secondspassed]"
+
+define news_wipe = ImageDissolve("newswipe.png", 0.5)
+define longdissolve = Dissolve(2.0)
+
+define alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+default intro_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+default intro_list_chosen = []
+default intro_change = None
+
+default intro_1 = renpy.random.choice(alphabet)
+default intro_2 = renpy.random.choice(alphabet)
+default intro_3 = renpy.random.choice(alphabet)
+default intro_4 = renpy.random.choice(alphabet)
+default intro_5 = renpy.random.choice(alphabet)
+default intro_6 = renpy.random.choice(alphabet)
+default intro_7 = renpy.random.choice(alphabet)
+default intro_8 = renpy.random.choice(alphabet)
+default intro_9 = renpy.random.choice(alphabet)
+default intro_10 = renpy.random.choice(alphabet)
+
+default intro_shuffle = False
+default goodtales = True
+default revenge_reveal =  False
+
+default hoursleft1 = 0
+default hoursleft2 = "%02d" % 0
+default minutesleft1 = 0
+default minutesleft2 = "%02d" % 0
+default secondsleft1 = 5
+default secondsleft2 = "%02d" % 5
+
+default secondspassed = 0.0
+default part1 = 0.0
+default part2 = 0.0
+
+default startorend = "ends"
+
+label splashscreen:
+    call start
+    $renpy.quit()
+    return
+
+label timeleft:
+    play sound clock_beep
+    show screen countdownclock
+    #show screen countdowntest
+    while secondspassed <= 5:
+        python:
+            renpy.pause(1)
+            secondsleft1 -= 1
+            secondsleft2 = "%02d" % secondsleft1
+            if int(secondsleft2) == 0 and int(minutesleft2) == 0 and int(hoursleft2) == 0:
+                renpy.play("audio/clock_beep.ogg", channel="sound")
+                renpy.play("audio/siren.ogg", channel="audio")
+                renpy.pause(2)
+                renpy.hide_screen("countdownclock")
+                renpy.with_statement(longdissolve)
+                renpy.pause(3)
+                renpy.return_statement()
+            elif secondsleft1 == -1:
+                if minutesleft1 > 0 or hoursleft1 > 0:
+                    secondsleft1 = 59
+                    secondsleft2 = "%02d" % 59
+                if minutesleft1 > 0:
+                    minutesleft2 = "%02d" % (minutesleft1 - 1)
+                elif hoursleft1 > 0:
+                    minutesleft2 = "%02d" % 59
+                    hoursleft2 = "%02d" % (hoursleft1 - 1)
+            renpy.play("audio/clock_beep.ogg", channel="sound")
+            secondspassed += 1
+    hide screen countdownclock
+    pause 2
+    $secondspassed = 0
+    return
+
+label start:
+    scene bg fade
+    with dissolve
+    pause 2
+    call timeleft
+    play music network
+    scene bg news with news_wipe
+    pause 0.5
+    show text "Good Morning, Seattle!\nwith Amy Harrison" at truecenter with dissolve
+    pause 2
+    hide text with dissolve
+    show amy at middle with dissolve
+    window show dissolve
+    pause 0.1
+    a "Good morning, Seattle! The clock has struck 4 AM Pacific Standard Time, which means the 2030 REDD War has officially come to an end!"
+    a "As emergency services spread throughout the 5 War Zones to help hurt humans and stop REDD who are still committing crime, statisticians across the globe are reviewing footage and data to calculate the deadliness of this REDD War."
+    a "Is it the deadliest?"
+    a "Is it on par with last year?"
+    a "Or is this the least-violent REDD War to date?"
+    a "We'll be sure to let you know the results as soon as we have them."
+    a "Let's now talk to our in-house REDD expert Majiku Vanlason for War highlights."
+    show amy at two2
+    show majiku at two1
+    with easeinleft
+    pause 0.1
+    m "Thanks, Amy."
+    a "So tell me, Majiku, what are some of the more notable things that occurred within the past 12 hours?"
+    m "Well, of course the biggest REDD War story of the night has to be the bloodshed at the Mr. Sprinkles live show in Atlanta."
+    m "While the body count is still being officially tallied up, we're estimating well over 100 casualties based on the broadcast alone."
+    m "Of course, with the broadcast being cut several hours ago, it's hard to tell for sure how many more have occurred."
+    a "100 casualties within 12 hours? Doesn't sound very dangerous."
+    m "Given the systematic nature of the situation, it makes sense why the count would be so low."
+    m "But with the mainstream attention the show received, a lot of other REDD War activities have gone relatively unnoticed and are only now being observed via security footage."
+    m "Take, for instance, this clip of these small neighborhood homes being destroyed with residents still inside."
+    a "Oh my! Is that a bulldozer??"
+    m "It is, indeed. Truly a mystery where the REDD got that from."
+    m "We also have this clip of 3 REDD chasing a young woman through the streets before another REDD comes out of nowhere and runs her over!"
+    a "Ouch! Talk about unlucky for all parties involved!"
+    m "Haha~! Well put, Amy!"
+    m "We'll be sure to compile a full list of REDD War Highlights and post them to the {i}Good Morning, Seattle{/i} website within the next few hours."
+    l "John, what are you doing up?"
+    window hide dissolve
+    $renpy.music.set_volume(0.5, delay=2.0, channel="music")
+    scene bg livingroom with longdissolve
+    pause 0.5
+    show leslie at middle with dissolve
+    window show dissolve
+    pause 0.1
+    "I turned and saw my wife walk into the room while rubbing her eye."
+    show leslie:
+        ease 0.5 two1
+    show john at two2 with dissolve
+    pause 0.1
+    j "Couldn't sleep."
+    "After she quit rubbing her eye, she took a look at the TV."
+    extend " Before sighing and sitting next to me."
+    l "John, I told you that watching the REDD War will do nothing but hurt you."
+    j "I know, but..."
+    "I crossed my arms as I thought about how to word it."
+    j "...I just..."
+    "Leslie placed her hand on mine."
+    l "I know you want to help these people, but you can't."
+    l "Even if you were actually in a War Zone, being a hero is suicide."
+    j "..."
+    stop music fadeout(3.0)
+    "She then leaned her head on my shoulder and we sat in silence."
+    l "..."
+    j "..."
+    $renpy.music.set_volume(1.0, channel="music")
+    play music hong_kong_midnight fadein(1.0)
+    j "This fucking night..."
+    "I finally spoke."
+    j "Every year..."
+    j "Thousands of innocent people killed..."
+    j "And yet the true scum of the Earth get off scott-free."
+    j "All because they're rich enough to pay off REDD for protection or escape the War Zone borders or even be lucky enough to not be located in a city where the War is being held."
+    "Leslie rubbed my hand as I vented."
+    j "I was hoping to see at least one, just one, REDD kill some notable gang leader or corrupted businessman or some shit."
+    j "But no."
+    j "If these damn aliens are gonna go killing people, at least go after the ones that deserve it, not these poor saps who were caught in the wrong place at the wrong time."
+    "I then sighed and leaned my head back."
+    l "..."
+    "My wife remained silent as she continued to comfort me."
+    j "Heh."
+    j "I guess it's kinda stupid to think those fuckers care about our desires, right?"
+    l "Well..."
+    "She sat up and turned towards me."
+    l "It's never stupid to want the world to be a better place, John."
+    l "And you're right; if the REDD are going to do what they're gonna do, they could at least try to do it to help us."
+    l "But..."
+    j "There's just no reasoning with them."
+    "I finished."
+    "She gave a small, awkward smile and looked down."
+    "I then turned back to the TV."
+    "More discussions on the REDD War's events."
+    "Apparently a big story that happened in Australia was a small group of REDD hanging a farmer upside-down while removing his limbs with a chainsaw."
+    "All while his children watched."
+    l "Look, you've still got a few hours left until you need to get ready for work."
+    l "Let's just head back to bed and get some rest, hm?"
+    j "..."
+    "I guess my eyelids were a bit heavy now that she mentioned it."
+    "Plus, clearing my mind wouldn't exactly be a bad things right now."
+    j "Alright. I'll be there in a minute."
+    "She smiled and gave me a quick kiss on the cheek before getting off the couch and back towards the bedroom."
+    stop music fadeout(3.0)
+    hide leslie with easeoutleft
+    pause 0.5
+    show john:
+        ease 1.0 middle
+    pause 1.5
+    j "..."
+    "I took one final look at the TV."
+    scene bg news with dissolve
+    pause 0.1
+    a "The REDD throughout the world who couldn't attend the War surely did seem excited at what they saw."
+    a "Although there are the occasional REDD who felt like everything seemed a bit disappointing compared to previous REDD Wars."
+    a "These Tweets from Lord Reddington seem to sum up their feelings perfectly:"
+    a "{i}While the 2030 REDD War has some notable events, I feel as if some areas are lacking. Low body counts, less painful deaths, etc.{/i}"
+    a "{i}Do not misunderstand: for the most part, I am pleased with the end product. But like with all things, they can be improved upon. Which is why I am working with the Base's greatest minds to create said improvement.{/i}"
+    $renpy.music.set_volume(0.0, channel="music")
+    play music three_sixty_five_days_intro
+    $renpy.music.set_volume(1.0, delay=10.0, channel="music")
+    a "{i}By this time next year, we may have the solution to creating the greatest REDD War in history. Until then, I wish safe travels to the REDD returning home and the best of luck to all of humanity.{w} You will need it.{/i}"
+    window hide dissolve
+    queue music three_sixty_five_days_main noloop
+
+label startintro:
+    if renpy.music.get_playing("music") != audio.three_sixty_five_days_main:
+        jump startintro
+
+    scene bg fade
+    $intro_shuffle = True
+    $secondspassed = 0.0
+    show screen intro
+    while intro_shuffle and goodtales:
+        python:
+            if 1 in intro_list:
+                intro_1 = renpy.random.choice(alphabet)
+            if 2 in intro_list:
+                intro_2 = renpy.random.choice(alphabet)
+            if 3 in intro_list:
+                intro_3 = renpy.random.choice(alphabet)
+            if 4 in intro_list:
+                intro_4 = renpy.random.choice(alphabet)
+            if 5 in intro_list:
+                intro_5 = renpy.random.choice(alphabet)
+            if 6 in intro_list:
+                intro_6 = renpy.random.choice(alphabet)
+            if 7 in intro_list:
+                intro_7 = renpy.random.choice(alphabet)
+            if 8 in intro_list:
+                intro_8 = renpy.random.choice(alphabet)
+            if 9 in intro_list:
+                intro_9 = renpy.random.choice(alphabet)
+            if 10 in intro_list:
+                intro_10 = renpy.random.choice(alphabet)
+            secondspassed += 0.1
+            renpy.pause(0.1)
+            if secondspassed > 2:
+                if len(intro_list) > 0:
+                    intro_change = renpy.random.choice(intro_list)
+                    if intro_change == 1:
+                        intro_1 = "G"
+                    elif intro_change == 2:
+                        intro_2 = "O"
+                    elif intro_change == 3:
+                        intro_3 = "O"
+                    elif intro_change == 4:
+                        intro_4 = "D"
+                    elif intro_change == 5:
+                        intro_5 = " "
+                    elif intro_change == 6:
+                        intro_6 = "T"
+                    elif intro_change == 7:
+                        intro_7 = "A"
+                    elif intro_change == 8:
+                        intro_8= "L"
+                    elif intro_change == 9:
+                        intro_9= "E"
+                    elif intro_change == 10:
+                        intro_10 = "S"
+                    intro_list.remove(intro_change)
+                    intro_list_chosen.append(intro_change)
+            if secondspassed >= 3.5:
+                intro_shuffle = False
+    pause 1.5
+    hide screen intro
+    pause 0.25
+    python:
+        goodtales = False
+        intro_shuffle = True
+        intro_list = [1, 2, 3, 4, 5, 6, 7, 8]
+        intro_list_chosen = []
+        secondspassed = 0.0
+    show screen intro
+    while intro_shuffle:
+        python:
+            if 1 in intro_list:
+                intro_1 = renpy.random.choice(alphabet)
+            if 2 in intro_list:
+                intro_2 = renpy.random.choice(alphabet)
+            if 3 in intro_list:
+                intro_3 = renpy.random.choice(alphabet)
+            if 4 in intro_list:
+                intro_4 = renpy.random.choice(alphabet)
+            if 5 in intro_list:
+                intro_5 = renpy.random.choice(alphabet)
+            if 6 in intro_list:
+                intro_6 = renpy.random.choice(alphabet)
+            if 7 in intro_list:
+                intro_7 = renpy.random.choice(alphabet)
+            if 8 in intro_list:
+                intro_8 = renpy.random.choice(alphabet)
+            secondspassed += 0.1
+            renpy.pause(0.1)
+            if secondspassed > 2:
+                if len(intro_list) > 0:
+                    intro_change = renpy.random.choice(intro_list)
+                    if intro_change == 1:
+                        intro_1 = "R"
+                    elif intro_change == 2:
+                        intro_2 = "E"
+                    elif intro_change == 3:
+                        intro_3 = "D"
+                    elif intro_change == 4:
+                        intro_4 = "D"
+                    elif intro_change == 5:
+                        intro_5 = " "
+                    elif intro_change == 6:
+                        intro_6 = "W"
+                    elif intro_change == 7:
+                        intro_7 = "A"
+                    elif intro_change == 8:
+                        intro_8 = "R"
+                    intro_list.remove(intro_change)
+                    intro_list_chosen.append(intro_change)
+            if secondspassed >= 3.5:
+                intro_shuffle = False
+    pause 0.25
+    $revenge_reveal = True
+    pause 4.25
+    hide screen intro
+    pause 3
+
+    return
