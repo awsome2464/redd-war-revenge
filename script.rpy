@@ -10,6 +10,7 @@ define a = Character("Amy", image="amy", what_prefix='"', what_suffix='"')
 define b = Character("Ben", image="ben", what_prefix='"', what_suffix='"')
 define c = Character("[cName]", image="croy", color="#d00000", what_prefix='"', what_suffix='"')
 define d = Character("[dName]", image="derima", color="#d00000", what_prefix='"', what_suffix='"')
+define dis = Character("Dispatch", what_italic=True, what_prefix='"', what_suffix='"')
 define f = Character("Flang", image="flang", color="#d00000", what_prefix='"', what_suffix='"')
 define h = Character("Hope", what_italic=True, what_prefix='"', what_suffix='"')
 define j = Character("John", image="john", what_prefix='"', what_suffix='"')
@@ -39,10 +40,25 @@ image slack = Placeholder("boy")
 
 # Backgrounds #
 
-image bg fade = "#000000"
+image bg black = "#000000"
 image bg news = "#000fff"
 image bg livingroom = "#5f5f5f"
 image bg patrolcar = "#2c2c2c"
+image bg white = "#ffffff"
+
+# CGs #
+
+image cg store_1 = "#c92323"
+image cg store_2 = "#ac3030"
+
+# Animated #
+
+image police_siren:
+    "police_siren_01.png" with Dissolve(0.1)
+    pause 0.2
+    "police_siren_02.png" with Dissolve(0.1)
+    pause 0.2
+    repeat
 
 # Text #
 
@@ -61,8 +77,11 @@ init python:
 
 # Music #
 
+define audio.drama = "audio/music/Closing-In-3.mp3"
+define audio.ending = "audio/music/Bitter-Sweet-Ending.mp3"
 define audio.news = "audio/music/Network.mp3"
 define audio.serious = "audio/music/Hong_Kong_Midnight.mp3"
+define audio.shock = "audio/music/Unpleasant-Discovery.mp3"
 define audio.three_sixty_five_days_intro = "<to 4.822 loop 4.22>audio/music/365 Days.ogg"
 define audio.three_sixty_five_days_main = "<from 4.822>audio/music/365 Days.ogg"
 define audio.patrol = "audio/music/Safe-Cracking_Looping.mp3"
@@ -72,7 +91,9 @@ define audio.patrol = "audio/music/Safe-Cracking_Looping.mp3"
 define audio.car_door = "audio/se/car_door.ogg"
 define audio.clock_beep = "audio/se/clock_beep.ogg"
 define audio.phone_vibrate = "audio/se/phone_vibrate.ogg"
+define audio.police_siren = "audio/se/police_siren.ogg"
 define audio.siren = "audio/se/siren.ogg"
+define audio.store_door = "audio/se/store_door.ogg"
 
 ##############
 # Transforms #
@@ -153,7 +174,7 @@ screen countdownclock():
         null height 50
         text "until the REDD War [startOrEnd]" style "countdown2" xalign 0.5
 
-screen intro:
+screen intro():
     if goodTales:
         text "PRESENTS" style "countdown2" at presents xalign 0.5
     if revengeReveal:
@@ -185,6 +206,7 @@ screen countdowntest():
 
 define news_wipe = ImageDissolve("newswipe.png", 0.5)
 define longdissolve = Dissolve(2.0)
+define scenefade = Dissolve(3.0)
 
 #############
 # Variables #
@@ -264,7 +286,7 @@ label timeleft:
     return
 
 label start:
-    scene bg fade
+    scene bg black
     with dissolve
     pause 2
     call timeleft from _call_timeleft
@@ -398,7 +420,7 @@ label startintro:
     if renpy.music.get_playing("music") != audio.three_sixty_five_days_main:
         jump startintro
 
-    scene bg fade
+    scene bg black
     $introShuffle = True
     $secondsPassed = 0.0
     show screen intro
@@ -512,4 +534,4 @@ label startintro:
     "But 2 years ago, my life changed forever."
     pause 2
 
-    jump chapter_1
+    jump prologue
