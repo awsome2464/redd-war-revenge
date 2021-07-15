@@ -6,18 +6,20 @@
 # Characters #
 ##############
 
-define a = Character("Amy", image="amy", what_prefix='"', what_suffix='"')
-define b = Character("Ben", image="ben", what_prefix='"', what_suffix='"')
-define c = Character("[cName]", image="croy", color="#d00000", what_prefix='"', what_suffix='"')
-define d = Character("[dName]", image="derima", color="#d00000", what_prefix='"', what_suffix='"')
-define dis = Character("Dispatch", what_italic=True, what_prefix='"', what_suffix='"')
-define f = Character("Flang", image="flang", color="#d00000", what_prefix='"', what_suffix='"')
-define h = Character("Hope", what_italic=True, what_prefix='"', what_suffix='"')
-define j = Character("John", image="john", what_prefix='"', what_suffix='"')
-define l = Character("Leslie", image="leslie", what_prefix='"', what_suffix='"')
-define m = Character("Majiku", image="majiku", color="#d00000", what_prefix='"', what_suffix='"')
-define p = Character("[pName]", image="pilli", color="#d00000", what_prefix='"', what_suffix='"')
-define s = Character("[sName]", image="slack", color="#d00000", what_prefix='"', what_suffix='"')
+define a = Character("Amy", image="amy", callback=female_human, what_prefix='"', what_suffix='"')
+define b = Character("Ben", image="ben", callback=male_human, what_prefix='"', what_suffix='"')
+define c = Character("[cName]", image="croy", callback=male_redd, color="#d00000", what_prefix='"', what_suffix='"')
+define car = Character("Carson", image="carson", callback=male_human, what_prefix='"', what_suffix='"')
+define d = Character("[dName]", image="derima", callback=female_redd, color="#d00000", what_prefix='"', what_suffix='"')
+define dis = Character("Dispatch", what_italic=True, callback=dispatch, what_prefix='"', what_suffix='"')
+define f = Character("Flang", image="flang", callback=male_redd, color="#d00000", what_prefix='"', what_suffix='"')
+define h = Character("Hope", what_italic=True, callback=female_human, what_prefix='"', what_suffix='"')
+define j = Character("John", image="john", callback=male_human, what_prefix='"', what_suffix='"')
+define k = Character("Kramie", image="kramie", callback=female_redd, color="#d00000", what_prefix='"', what_suffix='"')
+define l = Character("Leslie", image="leslie", callback=female_human, what_prefix='"', what_suffix='"')
+define m = Character("Majiku", image="majiku", callback=male_redd, color="#d00000", what_prefix='"', what_suffix='"')
+define p = Character("[pName]", image="pilli", callback=female_redd, color="#d00000", what_prefix='"', what_suffix='"')
+define s = Character("[sName]", image="slack", callback=male_redd, color="#d00000", what_prefix='"', what_suffix='"')
 
 define narrate = nvl_narrator
 
@@ -33,6 +35,7 @@ image croy = Placeholder("boy")
 image derima = Placeholder("girl")
 image flang = Placeholder("boy")
 image john = Placeholder("boy")
+image kramie = Placeholder("girl")
 image leslie = Placeholder("girl")
 image majiku = Placeholder("boy")
 image pilli = Placeholder("girl")
@@ -53,6 +56,35 @@ image cg store_2 = "#ac3030"
 
 # Animated #
 
+image good_tales_distort:
+    xalign 0.5 yalign 0.5
+    "good_tales_logo"
+    pause 2
+    "Good Tales Distort 01.png"
+    pause 0.05
+    "Good Tales Distort 02.png"
+    pause 0.05
+    "Good Tales Distort 03.png"
+    pause 0.05
+    zoom 1.5
+    xalign 0.0 yalign 0.0
+    pause 0.05
+    xalign 1.0 yalign 1.0
+    pause 0.05
+    "Good Tales Distort 04.png"
+    xalign 0.0
+    pause 0.05
+    xalign 1.0 yalign 0.0
+    pause 0.05
+    zoom 1.0
+    xalign 0.5 yalign 0.5
+    pause 0.05
+    "Good Tales Distort 05.png"
+    pause 0.05
+    "Good Tales Distort 06.png"
+    pause 0.05
+    "Good Tales Transparent Red.png"
+
 image police_siren:
     "police_siren_01.png" with Dissolve(0.1)
     pause 0.2
@@ -64,6 +96,17 @@ image police_siren:
 
 image chapter_name = ParameterizedText(style="chaptername")
 image chapter_subtitle = ParameterizedText(style="countdown2")
+image warning = Text("{size=+10}NOTICE:{/size}\nThis story contains graphic violence and strong language and is intended for mature audiences", style="warning", xalign=0.5, yalign=0.5)
+
+# Misc. #
+
+image game_logo:
+    "gui/logo.png"
+    size(948, 348)
+image good_tales_logo = "Good Tales Transparent.png"
+image redd_war:
+    "gui/reddwar.png"
+    size(948, 348)
 
 #########
 # Audio #
@@ -72,6 +115,7 @@ image chapter_subtitle = ParameterizedText(style="countdown2")
 # Custom Channels #
 
 init python:
+    renpy.music.register_channel("blip", mixer="sfx", loop=True)
     renpy.music.register_channel("loop", mixer="sfx", loop=True)
     renpy.music.register_channel("sound2", mixer="sfx", loop=None)
 
@@ -80,10 +124,13 @@ init python:
 define audio.drama = "audio/music/Closing-In-3.mp3"
 define audio.ending = "audio/music/Bitter-Sweet-Ending.mp3"
 define audio.news = "audio/music/Network.mp3"
+define audio.sad = "audio/music/Intruder.mp3"
 define audio.serious = "audio/music/Hong_Kong_Midnight.mp3"
 define audio.shock = "audio/music/Unpleasant-Discovery.mp3"
 define audio.three_sixty_five_days_intro = "<to 4.822 loop 4.22>audio/music/365 Days.ogg"
 define audio.three_sixty_five_days_main = "<from 4.822>audio/music/365 Days.ogg"
+define audio.title_full = "audio/music/War Time.ogg"
+define audio.title_part = "<from 17.4>audio/music/War Time.ogg"
 define audio.patrol = "audio/music/Safe-Cracking_Looping.mp3"
 
 # Sound Effects #
@@ -95,11 +142,54 @@ define audio.police_siren = "audio/se/police_siren.ogg"
 define audio.siren = "audio/se/siren.ogg"
 define audio.store_door = "audio/se/store_door.ogg"
 
+# Voice Blips #
+
+init -99 python:
+    def dispatch(event, interact=True, **kwargs):
+        if not interact:
+            return
+        if event == "show_done":
+            renpy.sound.play("audio/blip/dispatch.ogg", channel="blip", loop=True)
+        elif event == "slow_done":
+            renpy.sound.stop(channel="blip")
+
+    def female_human(event, interact=True, **kwargs):
+        if not interact:
+            return
+        if event == "show_done":
+            renpy.sound.play("audio/blip/female_human.ogg", channel="blip", loop=True)
+        elif event == "slow_done":
+            renpy.sound.stop(channel="blip")
+
+    def female_redd(event, interact=True, **kwargs):
+        if not interact:
+            return
+        if event == "show_done":
+            renpy.sound.play("audio/blip/female_redd.ogg", channel="blip", loop=True)
+        elif event == "slow_done":
+            renpy.sound.stop(channel="blip")
+
+    def male_human(event, interact=True, **kwargs):
+        if not interact:
+            return
+        if event == "show_done":
+            renpy.sound.play("audio/blip/male_human.ogg", channel="blip", loop=True)
+        elif event == "slow_done":
+            renpy.sound.stop(channel="blip")
+
+    def male_redd(event, interact=True, **kwargs):
+        if not interact:
+            return
+        if event == "show_done":
+            renpy.sound.play("audio/blip/male_redd.ogg", channel="blip", loop=True)
+        elif event == "slow_done":
+            renpy.sound.stop(channel="blip")
+
 ##############
 # Transforms #
 ##############
 
-# Character Transforms #
+# Stationary Transforms #
 
 transform middle:
     xalign 0.5 yalign 0.5
@@ -112,7 +202,7 @@ transform left:
 transform right:
     xalign 0.8 yalign 0.5
 
-# Intro Transforms #
+# Animated Transforms #
 
 transform introzoom:
     zoom 0.85
@@ -124,6 +214,9 @@ transform presents:
     linear 1.0 alpha 1.0
 transform revenge:
     xalign 0.5 yalign 0.5
+transform splash:
+    zoom 0.9
+    linear 5.0 zoom 1.0
 
 ##########
 # Styles #
@@ -156,6 +249,10 @@ style chaptername:
     font "fonts/BadSuabiaSwing-Regular.otf"
     size 150
     outlines [(absolute(5), "#464646", absolute(0), absolute(0))]
+style warning:
+    size gui.interface_text_size + 10
+    text_align 0.5
+    layout "subtitle"
 
 ##################
 # Custom Screens #
@@ -164,7 +261,7 @@ style chaptername:
 screen countdownclock():
     vbox:
         xalign 0.5 yalign 0.5
-        text "[hoursLeft2]:[minutesLeft2]:[secondsLeft2]" style "countdown" xalign 0.5
+        text "%02d:%02d:%02d" % (hoursLeft, minutesLeft, secondsLeft) style "countdown" xalign 0.5
         hbox:
             xalign 0.5
             spacing 140
@@ -197,7 +294,7 @@ screen intro():
 screen countdowntest():
     vbox:
         xalign 0.0 yalign 0.0
-        text "[hoursLeft1] [minutesLeft1] [secondsLeft1]"
+        text "[hoursLeft] [minutesLeft] [secondsLeft]"
         text "[secondsPassed]"
 
 ###############
@@ -211,6 +308,9 @@ define scenefade = Dissolve(3.0)
 #############
 # Variables #
 #############
+
+init python:
+    persistent.splash = True
 
 define alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 default introList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -231,18 +331,15 @@ default introShuffle = False
 default goodTales = True
 default revengeReveal =  False
 
-default hoursLeft1 = 0
-default hoursLeft2 = "%02d" % 0
-default minutesLeft1 = 0
-default minutesLeft2 = "%02d" % 0
-default secondsLeft1 = 5
-default secondsLeft2 = "%02d" % 5
+default hoursLeft = 0
+default minutesLeft = 0
+default secondsLeft = 5
 
 default secondsPassed = 0.0
 default part1 = 0.0
 default part2 = 0.0
 
-default startOrEnd = "ends"
+default startOrEnd = "begins"
 
 default cName = "Geek"
 default dName = "Muscles"
@@ -251,46 +348,81 @@ default sName = "Doctor"
 
 ######################################################################################################################################################
 
+label before_main_menu:
+    stop sound
+    stop sound2
+    stop loop
+    scene bg black
+    if persistent.splash:
+        play music title_full noloop
+        pause 1
+        show warning with Dissolve(1.0)
+        pause 3.6
+        hide warning with Dissolve(1.0)
+        pause 1
+        show good_tales_distort at splash with Dissolve(2.0)
+        play sound "audio/se/glitch.ogg"
+        pause 4
+        hide good_tales_distort with Dissolve(2.0)
+        pause 1.65
+        $persistent.splash = False
+    else:
+        play music title_part noloop
+    pause 2
+    show redd_war at middle zorder 2 with Dissolve(2.0)
+    pause 1
+    show game_logo at middle zorder 1 with Dissolve(2.0)
+    pause 1.5
+    scene bg black
+    pause 0.75
+    return
+
 label timeleft:
+    $renpy.music.set_volume(0.5, channel="sound")
+    $secondsPassed = 0
     play sound clock_beep
     show screen countdownclock
     #show screen countdowntest
     while secondsPassed <= 5:
         python:
             renpy.pause(1)
-            secondsLeft1 -= 1
-            secondsLeft2 = "%02d" % secondsLeft1
-            if int(secondsLeft2) == 0 and int(minutesLeft2) == 0 and int(hoursLeft2) == 0:
-                renpy.music.set_volume(0.25, channel="sound")
-                renpy.play("audio/se/clock_beep.ogg", channel="sound2")
-                renpy.play("audio/se/siren.ogg", channel="sound")
-                renpy.pause(2)
-                renpy.hide_screen("countdownclock")
-                renpy.with_statement(longdissolve)
-                renpy.pause(3)
-                renpy.return_statement()
-            elif secondsLeft1 == -1:
-                if minutesLeft1 > 0 or hoursLeft1 > 0:
-                    secondsLeft1 = 59
-                    secondsLeft2 = "%02d" % 59
-                if minutesLeft1 > 0:
-                    minutesLeft2 = "%02d" % (minutesLeft1 - 1)
-                elif hoursLeft1 > 0:
-                    minutesLeft2 = "%02d" % 59
-                    hoursLeft2 = "%02d" % (hoursLeft1 - 1)
+            secondsLeft -= 1
+            if secondsLeft == 0 and minutesLeft == 0 and hoursLeft == 0:
+                renpy.music.set_volume(0.25, channel="sound2")
+                renpy.play("audio/se/clock_beep.ogg", channel="sound")
+                renpy.play("audio/se/siren.ogg", channel="sound2")
+                if startOrEnd == "ends":
+                    renpy.pause(2)
+                    renpy.hide_screen("countdownclock")
+                    renpy.with_statement(longdissolve)
+                    renpy.pause(3)
+                    renpy.return_statement()
+                elif startOrEnd == "begins":
+                    hoursLeft = 12
+                    startOrEnd = "ends"
+            elif secondsLeft == -1:
+                if minutesLeft > 0 or hoursLeft > 0:
+                    secondsLeft = 59
+                if minutesLeft > 0:
+                    minutesLeft -= 1
+                elif hoursLeft > 0:
+                    minutesLeft = 59
+                    hoursLeft -= 1
             renpy.play("audio/se/clock_beep.ogg", channel="sound")
             secondsPassed += 1
     hide screen countdownclock
     pause 2
     $secondsPassed = 0
+    $renpy.music.set_volume(1.0, channel="sound")
     return
 
 label start:
+    stop music fadeout(3.0)
     scene bg black
     with dissolve
     pause 2
     call timeleft from _call_timeleft
-    stop sound
+    stop sound2
     play music network
     scene bg news with news_wipe
     pause 0.5
@@ -412,7 +544,7 @@ label start:
     a "{i}While the 2030 REDD War has some notable events, I feel as if some areas are lacking. Low body counts, less painful deaths, etc.{/i}"
     a "{i}Do not misunderstand: for the most part, I am pleased with the end product. But like with all things, they can be improved upon. Which is why I am working with the Base's greatest minds to create said improvement.{/i}"
     play music three_sixty_five_days_intro fadein(10.0)
-    a "{i}By this time next year, we may have the solution to creating the greatest REDD War in history. Until then, I wish safe travels to the REDD returning home and the best of luck to all of humanity.{w} You will need it.{/i}"
+    a "{i}By this time next year, we may have the solution to creating the greatest REDD War in history. Until then, I wish safe travels to the REDD returning home and the best of luck to all of humanity.{w=0.5} You will need it.{/i}"
     window hide dissolve
     queue music three_sixty_five_days_main noloop
 

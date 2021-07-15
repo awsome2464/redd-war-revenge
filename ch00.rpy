@@ -13,17 +13,11 @@ label prologue:
     pause 2
 label on_duty:
     python:
-        renpy.music.set_volume(0.5, channel="sound")
-        secondsPassed = 0
-        hoursLeft1 = 168
-        hoursLeft2 = "%02d" % 168
-        minutesLeft1 = 0
-        minutesLeft2 = "%02d" % 0
-        secondsLeft1 = 0
-        secondsLeft2 = "%02d" % 0
+        hoursLeft = 168
+        minutesLeft = 0
+        secondsLeft = 0
         startOrEnd = "begins"
     call timeleft
-    $renpy.music.set_volume(1.0, channel="sound")
     play music patrol
     scene bg patrolcar
     show john at two2
@@ -226,6 +220,7 @@ label on_duty:
     ...
     """
     nvl hide
+    nvl clear
     stop music
     "Then, by the soda fountain in the back corner of the store, there was someone lying on the ground."
     scene cg store_2 with longdissolve
@@ -243,3 +238,163 @@ label on_duty:
     pause 1
     j "{cps=*0.5}{b}H O O O O O O O O P E ! ! !{/b}{/cps}"
     pause 3
+    play music intruder
+    nvl show dissolve
+    narrate """
+    Due to the personal tie to this particular incident, I was essentially forbidden to have any involvement in it besides my initial statement of what I witnessed.
+
+    And due to the personal loss that had occurred, I was given time off to cope.
+
+    I was told that I could take as much time as I needed before I returned.
+
+    But come on.{w=0.2} No amount of \"time off\" is ever going to make this pain go away.
+
+    {nw}
+
+    When I told Leslie what had happened to our daughter...
+
+    Well, how do you {b}think{/b} she would react to that news?
+
+    Our little girl...{w=0.3} Our superstar softball pitcher...{w=0.3} Our aspiring chef...
+
+    Gone.
+
+    {clear}
+
+    Even though I had no direct involvement with the case, I still soaked up information on the investigation from both the news and Ben.
+
+    Fortunately, the security cameras were operational, and clear footage of the shooters was found.
+
+    According to Ben, they were all REDD.{w} But not just any REDD.
+
+    He said that the culprit was Flang Sormin and two of his crew.
+
+    Just hearing that name caused me to tense up.
+    """
+    nvl hide dissolve
+    nvl clear
+    show flang at middle with longdissolve
+    pause 0.5
+    nvl show dissolve
+    narrate """
+    Flang Sormin is the most notorious gang leader in all of Seattle.{w=0.2}\nNay, the entire west coast.
+
+    As a REDD, he's naturally intimidating and powerful, so it didn't take long for him to overthrow a lot of the criminals already plaguing the city.
+
+    Though his rise to power is essentially the equivalent of replacing 10 starving wolves with 1 starving bear.
+
+    He's often the example humans turn to as to how the REDD are too dangerous to belong in our society.
+
+    On the inverse, he's often the example REDD turn to as to why the REDD War needs to be more frequent and spacious, since apparently legal crime in only 5 cities for 12 hours a year isn't good enough for them.
+
+    {clear}
+
+    But then Ben told me something.
+
+    He said that despite having clear footage of the culprits, the station is going to just drop the investigation.
+
+    They claim it's because it's a relatively low-profile crime compared to Sormin's other disasters, but Ben and I aren't stupid.
+
+    {nw}
+
+    It's an open secret that the reason Sormin is able to get away with half the shit he does is because he's in cahoots with the force.
+
+    Well, I suppose the proper way to describe it is he's {b}blackmailing{/b} the force.
+
+    After all, Flang Sormin is a pretty big name.{w=0.2} So big, in fact, that even the REDD leader, Lord Reddington, is aware of him and his work.
+
+    If Flang Sormin were to be incarcerated, it might just piss off the most influential REDD on the entire planet.
+
+    And God help the man that does that.
+    """
+    nvl hide dissolve
+    nvl clear
+    pause 0.5
+    hide flang with longdissolve
+    pause 1
+    nvl show dissolve
+    narrate """
+    It's kinda funny and cliché, really.
+
+    {i}\"You never fully realize how bad it is until it happens to you.\"{/i}
+
+    I knew that the force conveniently would put as little effort as possible into stopping Sormin.
+
+    I knew that families wouldn't receive any proper closure as a result.
+
+    But things like this happened even long before the REDD showed up, so I guess it was more or less to be expected.
+
+    {nw}
+
+    But now...
+
+    Well, now it's personal.
+
+    I suppose I was hopeful enough to think they would make an exception for me.
+
+    For one of their fellow brothers.
+
+    {nw}
+
+    But no.
+
+    They feared the REDD more than they cared for one of their own.
+
+    {clear}
+
+    Well, that's their choice.
+
+    So now it's my turn to make mine.
+
+    {nw}
+
+    My \"time off\" had officially gone from temporary to indefinitely.
+
+    Maybe it wasn't the wisest move, since it was still a source of income, and funerals aren't exactly cheap.
+
+    But unlike the higher-ups, I have a soul.
+
+    {clear}
+
+    Some of the stress in my life was reduced a week after the shooting, when it was revealed that Seattle wasn't one of the 5 War Zones.{w=0.2} That honor was given to Reno.
+
+    Honestly, that might be for the best.
+
+    Not only because that means that the city won't collapse on itself in a 12-hour night, but who knows what I might've done to take advantage of it.
+
+    The rules of the REDD War state that humans can only attack a REDD in self-defense, but if my daughter's death has shown anything, it's that rules alone don't do jack shit to stop someone.
+
+    That's why I always wanted to be in law enforcement ever since I was a kid:{w=0.2} someone needs to keep the \"good guys\" safe and the \"bad guys\" locked up.
+
+    Though, sadly, it's not that simple, is it?
+
+    As the old saying goes, \"Everyone is the good guy in their own story.\"
+
+    {clear}
+
+    I wasn't really sure where my life was going to go from there.
+
+    I didn't know when or if I'd get a new job.
+
+    I didn't know when or if the bills would be paid.
+
+    I didn't know when or if we'd get food on the table.
+
+    I didn't know when or if we'd fully accept everything that had happened.
+
+    {nw}
+
+    But there was one thing that I did know for sure.
+
+    If I'm ever given the chance to come face-to-face with Flang Sormin...
+
+    ...I'll serve justice the only way I possibly can.
+
+    {nw}
+    """
+    stop music
+    narrate "By killing him."
+    nvl hide
+    nvl clear
+    pause 3
+    jump chapter_1
