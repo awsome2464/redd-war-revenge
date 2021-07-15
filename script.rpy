@@ -339,7 +339,7 @@ default secondsPassed = 0.0
 default part1 = 0.0
 default part2 = 0.0
 
-default startOrEnd = "begins"
+default startOrEnd = "ends"
 
 default cName = "Geek"
 default dName = "Muscles"
@@ -384,32 +384,31 @@ label timeleft:
     show screen countdownclock
     #show screen countdowntest
     while secondsPassed <= 5:
-        python:
-            renpy.pause(1)
-            secondsLeft -= 1
-            if secondsLeft == 0 and minutesLeft == 0 and hoursLeft == 0:
-                renpy.music.set_volume(0.25, channel="sound2")
-                renpy.play("audio/se/clock_beep.ogg", channel="sound")
-                renpy.play("audio/se/siren.ogg", channel="sound2")
-                if startOrEnd == "ends":
-                    renpy.pause(2)
-                    renpy.hide_screen("countdownclock")
-                    renpy.with_statement(longdissolve)
-                    renpy.pause(3)
-                    renpy.return_statement()
-                elif startOrEnd == "begins":
-                    hoursLeft = 12
-                    startOrEnd = "ends"
-            elif secondsLeft == -1:
-                if minutesLeft > 0 or hoursLeft > 0:
-                    secondsLeft = 59
-                if minutesLeft > 0:
-                    minutesLeft -= 1
-                elif hoursLeft > 0:
-                    minutesLeft = 59
-                    hoursLeft -= 1
-            renpy.play("audio/se/clock_beep.ogg", channel="sound")
-            secondsPassed += 1
+        pause 1
+        $secondsLeft -= 1
+        if secondsLeft == 0 and minutesLeft == 0 and hoursLeft == 0:
+            $renpy.music.set_volume(0.25, channel="sound2")
+            play sound "audio/se/clock_beep.ogg"
+            play sound2 "audio/se/siren.ogg"
+            if startOrEnd == "ends":
+                pause 2
+                hide screen countdownclock
+                with longdissolve
+                pause 3
+                return
+            elif startOrEnd == "begins":
+                $hoursLeft = 12
+                $startOrEnd = "ends"
+        elif secondsLeft == -1:
+            if minutesLeft > 0 or hoursLeft > 0:
+                $secondsLeft = 59
+            if minutesLeft > 0:
+                $minutesLeft -= 1
+            elif hoursLeft > 0:
+                $minutesLeft = 59
+                $hoursLeft -= 1
+        play sound "audio/se/clock_beep.ogg"
+        $secondsPassed += 1
     hide screen countdownclock
     pause 2
     $secondsPassed = 0
