@@ -9,7 +9,7 @@
 define a = Character("Amy", image="amy", callback=female_human, what_prefix='"', what_suffix='"')
 define b = Character("Ben", image="ben", callback=male_human, what_prefix='"', what_suffix='"')
 define c = Character("[cName]", image="croy", callback=male_redd, color="#d00000", what_prefix='"', what_suffix='"')
-define car = Character("Carson", image="carson", callback=male_human, what_prefix='"', what_suffix='"')
+define car = Character("Carson", callback=male_human, what_prefix='"', what_suffix='"')
 define d = Character("[dName]", image="derima", callback=female_redd, color="#d00000", what_prefix='"', what_suffix='"')
 define dis = Character("Dispatch", what_italic=True, callback=dispatch, what_prefix='"', what_suffix='"')
 define f = Character("Flang", image="flang", callback=male_redd, color="#d00000", what_prefix='"', what_suffix='"')
@@ -19,6 +19,7 @@ define k = Character("Kramie", image="kramie", callback=female_redd, color="#d00
 define l = Character("Leslie", image="leslie", callback=female_human, what_prefix='"', what_suffix='"')
 define m = Character("Majiku", image="majiku", callback=male_redd, color="#d00000", what_prefix='"', what_suffix='"')
 define p = Character("[pName]", image="pilli", callback=female_redd, color="#d00000", what_prefix='"', what_suffix='"')
+define r = Character("Reddington", callback=male_redd, color="d00000", what_prefix='"', what_suffix='"')
 define s = Character("[sName]", image="slack", callback=male_redd, color="#d00000", what_prefix='"', what_suffix='"')
 
 define narrate = nvl_narrator
@@ -44,13 +45,16 @@ image slack = Placeholder("boy")
 # Backgrounds #
 
 image bg black = "#000000"
-image bg news = "#000fff"
+image bg kitchen = "#7100b3"
 image bg livingroom = "#5f5f5f"
+image bg news = "#000fff"
 image bg patrolcar = "#2c2c2c"
 image bg white = "#ffffff"
 
 # CGs #
 
+image cg carson = "#008511"
+image cg halloween = "#e59d00"
 image cg store_1 = "#c92323"
 image cg store_2 = "#ac3030"
 
@@ -124,6 +128,7 @@ init python:
 define audio.drama = "audio/music/Closing-In-3.mp3"
 define audio.ending = "audio/music/Bitter-Sweet-Ending.mp3"
 define audio.news = "audio/music/Network.mp3"
+define audio.reddington = "audio/music/Heaven and Hell.mp3"
 define audio.sad = "audio/music/Intruder.mp3"
 define audio.serious = "audio/music/Hong_Kong_Midnight.mp3"
 define audio.shock = "audio/music/Unpleasant-Discovery.mp3"
@@ -135,12 +140,15 @@ define audio.patrol = "audio/music/Safe-Cracking_Looping.mp3"
 
 # Sound Effects #
 
+define audio.applause = "audio/se/applause.ogg"
+define audio.cameras = "audio/se/cameras.ogg"
 define audio.car_door = "audio/se/car_door.ogg"
 define audio.clock_beep = "audio/se/clock_beep.ogg"
 define audio.phone_vibrate = "audio/se/phone_vibrate.ogg"
 define audio.police_siren = "audio/se/police_siren.ogg"
 define audio.siren = "audio/se/siren.ogg"
 define audio.store_door = "audio/se/store_door.ogg"
+define audio.tv = "audio/se/tv.ogg"
 
 # Voice Blips #
 
@@ -265,9 +273,18 @@ screen countdownclock():
         hbox:
             xalign 0.5
             spacing 140
-            text "HOURS" style "countdown3"
-            text "MINUTES" style "countdown3"
-            text "SECONDS" style "countdown3"
+            if hoursLeft == 1:
+                text "HOUR" style "countdown3"
+            else:
+                text "HOURS" style "countdown3"
+            if minutesLeft == 1:
+                text "MINUTE" style "countdown3"
+            else:
+                text "MINUTES" style "countdown3"
+            if secondsLeft == 1:
+                text "SECOND" style "countdown3"
+            else:
+                text "SECONDS" style "countdown3"
         null height 50
         text "until the REDD War [startOrEnd]" style "countdown2" xalign 0.5
 
@@ -415,6 +432,13 @@ label timeleft:
     $renpy.music.set_volume(1.0, channel="sound")
     return
 
+label scene_end:
+    pause 2
+    stop music fadeout(5.0)
+    scene bg black with scenefade
+    pause 3
+    return
+
 label start:
     stop music fadeout(3.0)
     scene bg black
@@ -437,7 +461,7 @@ label start:
     a "Is it on par with last year?"
     a "Or is this the least-violent REDD War to date?"
     a "We'll be sure to let you know the results as soon as we have them."
-    a "Let's now talk to our in-house REDD expert Majiku Vanlason for War highlights."
+    a "Let's now talk to our in-house REDD War expert Majiku Vanlason for War highlights."
     show amy at two2
     show majiku at two1
     with easeinleft
